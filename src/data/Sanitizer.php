@@ -31,7 +31,6 @@ class Sanitizer
                 $valid_count++;
             }
         }
-        echo $valid_count;
 
         return ($valid_count / max(count($words), 1)) >= 0.5;
     }
