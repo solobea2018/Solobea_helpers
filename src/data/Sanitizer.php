@@ -18,7 +18,7 @@ class Sanitizer
         // Load a list of known Swahili & English keywords
         $known_words = array_merge(
             explode("\n", file_get_contents(__DIR__."/../../dictionary/kamusi.txt")),
-            explode("\n", file_get_contents(__DIR__."/../..dictionary/dictionary.txt"))
+            explode("\n", file_get_contents(__DIR__."/../../dictionary/dictionary.txt"))
         );
 
         // Normalize and split the input text
