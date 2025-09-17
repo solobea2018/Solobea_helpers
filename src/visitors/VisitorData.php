@@ -5,7 +5,7 @@ namespace Solobea\Helpers\visitor;
 
 class VisitorData
 {
-    private static $blockFile =  'ips/blocked_fingerprints.json';
+    private static string $blockFile =  __DIR__.'/../../ips/blocked_fingerprints.json';
 
     public static function getIPAddress(): string {
         if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
