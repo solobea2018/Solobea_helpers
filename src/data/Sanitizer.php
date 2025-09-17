@@ -13,7 +13,6 @@ class Sanitizer
 
     public static function is_valid_message($text): bool
     {
-        // Minimum length to be considered valid
         if (strlen(trim($text)) < 4) return false;
 
         // Load a list of known Swahili & English keywords
@@ -32,6 +31,7 @@ class Sanitizer
                 $valid_count++;
             }
         }
+        echo $valid_count;
 
         return ($valid_count / max(count($words), 1)) >= 0.5;
     }
