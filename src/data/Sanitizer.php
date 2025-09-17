@@ -13,7 +13,7 @@ class Sanitizer
 
     public static function is_valid_message($text): bool
     {
-        if (strlen(trim($text)) < 4) return false;
+        if (strlen(trim($text)) < 2) return false;
 
         // Load a list of known Swahili & English keywords
         $known_words = array_merge(
