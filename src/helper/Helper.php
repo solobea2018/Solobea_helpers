@@ -372,5 +372,29 @@ class Helper
         ];
         return !in_array($ip, $non_human_ips, true);
     }
+    public static function formatPriceToTZS($amount, $locale = 'sw_TZ'): string
+    {
+        // Create a NumberFormatter instance with the currency style
+        $formatter = new NumberFormatter($locale, NumberFormatter::CURRENCY);
 
+        // Format the amount as per the locale's currency
+        return $formatter->formatCurrency($amount, 'Tsh'); // Using 'TZS' for Tanzanian Shilling
+    }
+    /**
+     * Validates a Tanzanian mobile number.
+     *
+     * @param $number
+     * @return bool
+     */
+    public function isValidTanzanianNumber($number): bool
+    {
+        // Remove spaces, dashes, or parentheses from the number
+        $number = preg_replace('/[\s\-\(\)]/', '', $number);
+
+        // Pattern to match Tanzanian mobile numbers
+        $pattern = '/^(?:\+?255|0)(?:7[1-9]|6[1-9]|4[1-9])[0-9]{7}$/';
+
+        // Validate the number using the regex
+        return preg_match($pattern, $number) === 1;
+    }
 }
