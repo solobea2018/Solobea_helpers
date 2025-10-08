@@ -373,4 +373,34 @@ class Helper
         return !in_array($ip, $non_human_ips, true);
     }
 
+    /**
+     * Validate a Tanzania NIDA (NIN) number.
+     *
+     * Rules:
+     * - Must be exactly 20 digits long.
+     * - Must contain digits only.
+     * - Optional: May start with the 4-digit year of birth (e.g., 1990–2025).
+     * - Returns true if valid, false otherwise.
+     */
+    public static function validate_nin(string $nin): bool
+    {
+        // Remove spaces or unwanted characters
+        $nin = trim($nin);
+
+        // Check for numeric and 20 digits
+        if (!preg_match('/^\d{20}$/', $nin)) {
+            return false;
+        }
+
+        // Optional: validate first 4 digits as possible year of birth
+        $year = substr($nin, 0, 4);
+        if ($year < 1900 || $year > date("Y")) {
+            return false;
+        }
+
+        // Optional: Add checksum logic here if NIDA publishes one
+        // For now, consider it valid if the above checks pass
+        return true;
+    }
+
 }
