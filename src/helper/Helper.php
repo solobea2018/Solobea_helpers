@@ -402,5 +402,18 @@ class Helper
         // For now, consider it valid if the above checks pass
         return true;
     }
+    public static function getBaseUrl(): string
+    {
+        // Detect scheme (http or https)
+        $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'
+            || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+
+        // Detect host name
+        $host = $_SERVER['HTTP_HOST'];
+
+        // Combine and return
+        return $protocol . $host;
+    }
+
 
 }
