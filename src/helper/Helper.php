@@ -439,4 +439,13 @@ class Helper
         // Combine and return
         return $protocol . $host;
     }
+    function is_html($string): bool
+    {
+        // Remove all HTML tags
+        $stripped = strip_tags($string);
+
+        // If stripping tags changes the string, it means HTML was present
+        return $stripped !== $string;
+    }
+
 }
