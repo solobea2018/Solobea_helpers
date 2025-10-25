@@ -14,5 +14,11 @@
             "email": "aw1116sm@gmail.com"
         }
     ],
-    "require": {}
+    "require": {
+        "ext-curl": "*",
+      "ext-mbstring": "*",
+      "ext-libxml": "*",
+      "ext-dom": "*",
+        "ext-gd": "*"
+    }
 }

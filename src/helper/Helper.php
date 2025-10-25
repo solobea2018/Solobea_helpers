@@ -397,4 +397,46 @@ class Helper
         // Validate the number using the regex
         return preg_match($pattern, $number) === 1;
     }
+
+    /**
+     * Validate a Tanzania NIDA (NIN) number.
+     *
+     * Rules:
+     * - Must be exactly 20 digits long.
+     * - Must contain digits only.
+     * - Optional: May start with the 4-digit year of birth (e.g., 1990–2025).
+     * - Returns true if valid, false otherwise.
+     */
+    public static function validate_nin(string $nin): bool
+    {
+        // Remove spaces or unwanted characters
+        $nin = trim($nin);
+
+        // Check for numeric and 20 digits
+        if (!preg_match('/^\d{20}$/', $nin)) {
+            return false;
+        }
+
+        // Optional: validate first 4 digits as possible year of birth
+        $year = substr($nin, 0, 4);
+        if ($year < 1900 || $year > date("Y")) {
+            return false;
+        }
+
+        // Optional: Add checksum logic here if NIDA publishes one
+        // For now, consider it valid if the above checks pass
+        return true;
+    }
+    public static function getBaseUrl(): string
+    {
+        // Detect scheme (http or https)
+        $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'
+            || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+
+        // Detect host name
+        $host = $_SERVER['HTTP_HOST'];
+
+        // Combine and return
+        return $protocol . $host;
+    }
 }

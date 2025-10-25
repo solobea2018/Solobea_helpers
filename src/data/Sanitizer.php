@@ -13,12 +13,12 @@ class Sanitizer
 
     public static function is_valid_message($text): bool
     {
-        if (strlen(trim($text)) < 4) return false;
+        if (strlen(trim($text)) < 2) return false;
 
         // Load a list of known Swahili & English keywords
         $known_words = array_merge(
-            explode("\n", file_get_contents("dictionary/kamusi.txt")),
-            explode("\n", file_get_contents("dictionary/dictionary.txt"))
+            explode("\n", file_get_contents(__DIR__."/../../dictionary/kamusi.txt")),
+            explode("\n", file_get_contents(__DIR__."/../../dictionary/dictionary.txt"))
         );
 
         // Normalize and split the input text
@@ -35,7 +35,8 @@ class Sanitizer
         return ($valid_count / max(count($words), 1)) >= 0.5;
     }
 
-    public static function clean_for_json($text) {
+    public static function clean_for_json($text): array|string|null
+    {
         // Step 1: Fix encoding issues (auto-replaces broken sequences)
         $text = mb_convert_encoding($text, 'UTF-8', 'UTF-8');
 
