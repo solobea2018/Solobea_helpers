@@ -441,6 +441,93 @@ class Helper
         // Combine and return
         return $protocol . $host;
     }
+    public static function resizeImage($sourcePath, $targetPath, $width = 120, $height = 150) {
+        // Get original image size and type
+        list($origWidth, $origHeight, $imageType) = getimagesize($sourcePath);
+
+        // Create image from source based on type
+        switch ($imageType) {
+            case IMAGETYPE_JPEG:
+                $srcImage = imagecreatefromjpeg($sourcePath);
+                break;
+            case IMAGETYPE_PNG:
+                $srcImage = imagecreatefrompng($sourcePath);
+                break;
+            case IMAGETYPE_GIF:
+                $srcImage = imagecreatefromgif($sourcePath);
+                break;
+            case IMAGETYPE_WEBP:
+                $srcImage = imagecreatefromwebp($sourcePath);
+                break;
+            default:
+                die("Unsupported image type.");
+        }
+
+        // Create a blank true color image
+        $dstImage = imagecreatetruecolor($width, $height);
+
+        // Resize
+        imagecopyresampled($dstImage, $srcImage, 0, 0, 0, 0,
+            $width, $height, $origWidth, $origHeight);
+
+        // Save the resized image to the target path
+        imagejpeg($dstImage, $targetPath, 90); // 90 = quality
+
+        // Free memory
+        imagedestroy($srcImage);
+        imagedestroy($dstImage);
+    }
+    public static function optimizeProjectImage($source, $destination, $quality = 75, $maxSizeKB = 200): bool
+    {
+        if (!file_exists($source)) {
+            return false;
+        }
+
+        $fileSizeKB = filesize($source) / 1024;
+
+        /* If already small enough, just copy */
+        if ($fileSizeKB <= $maxSizeKB) {
+            if ($source !== $destination) {
+                return copy($source, $destination);
+            }
+            return true;
+        }
+
+        $info = getimagesize($source);
+        if ($info === false) {
+            return false;
+        }
+
+        $mime = $info['mime'];
+
+        switch ($mime) {
+            case 'image/jpeg':
+                $image = imagecreatefromjpeg($source);
+                $result = imagejpeg($image, $destination, $quality);
+                break;
+
+            case 'image/png':
+                $image = imagecreatefrompng($source);
+                imagepalettetotruecolor($image);
+                imagealphablending($image, false);
+                imagesavealpha($image, true);
+
+                $pngQuality = 9 - round(($quality / 100) * 9);
+                $result = imagepng($image, $destination, $pngQuality);
+                break;
+
+            case 'image/webp':
+                $image = imagecreatefromwebp($source);
+                $result = imagewebp($image, $destination, $quality);
+                break;
+
+            default:
+                return false;
+        }
+
+        imagedestroy($image);
+        return $result;
+    }
 
 
 }
